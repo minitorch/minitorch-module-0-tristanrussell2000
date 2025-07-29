@@ -1,6 +1,7 @@
 """Collection of the core mathematical operators used throughout the code base."""
 
 import math
+from typing import Callable, Iterable, Tuple
 
 # ## Task 0.1
 
@@ -31,7 +32,6 @@ import math
 # $f(x) = |x - y| < 1e-2$
 
 
-# TODO: Implement for Task 0.1.
 def add(a: float, b: float) -> float:
     """Addition.
 
@@ -304,19 +304,38 @@ def relu_back(x: float, b: float) -> float:
 # - sum: sum lists
 # - prod: take the product of lists
 
+def map(f: Callable, l1: Iterable) -> Iterable:
+    for n in l1:
+        yield f(n)
 
-# TODO: Implement for Task 0.3.
-def addLists(l1: list, l2: list) -> list:
-    raise NotImplementedError
+def zipWith[T, G](l1: Iterable[T], l2: Iterable[G]) -> Iterable[Tuple[T, G]]:
+    it1 = iter(l1)
+    it2 = iter(l2)
+    while True:
+        try:
+            n1 = next(it1)
+            n2 = next(it2)
+        except StopIteration:
+            return
+        yield (n1, n2)
+
+def reduce[T, G](op: Callable[[T, G], G], init: G, l: Iterable[T]) -> G:
+    build = init
+    for n in l:
+        build = op(n, build)
+    return build
+
+def addLists(l1: Iterable[float], l2: Iterable[float]) -> Iterable[float]:
+    return reduce(lambda z, sum: sum + [z[0] + z[1]], [], zipWith(l1, l2))
 
 
-def negList(l: list) -> list:
-    raise NotImplementedError
+def negList(l: Iterable) -> Iterable:
+    return map(lambda x: -x, l)
 
 
-def sum(l1: list) -> list:
-    raise NotImplementedError
+def sum(l1: Iterable[float]) -> float:
+    return reduce(add, 0, l1)
 
 
-def prod(l1: list) -> list:
-    raise NotImplementedError
+def prod(l1: Iterable[float]) -> float:
+    return reduce(mul, 1, l1)
