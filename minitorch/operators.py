@@ -33,6 +33,76 @@ from typing import Callable, Iterable
 
 
 # TODO: Implement for Task 0.1.
+def add(a: float, b: float) -> float:
+    return a + b
+
+
+def neg(a: float) -> float:
+    return -a
+
+
+def id(a: float) -> float:
+    return a
+
+
+def mul(a: float, b: float) -> float:
+    return a * b
+
+
+def lt(a: float, b: float) -> bool:
+    return a < b
+
+
+def eq(a: float, b: float) -> bool:
+    return a == b
+
+
+def max(a: float, b: float) -> float:
+    return a if a > b else b
+
+
+def is_close(a: float, b: float) -> float:
+    return abs(a - b) < 1e-2
+
+
+def sigmoid(x: float) -> float:
+    if x > 0:
+        return 1 / (1 + math.pow(math.e, -x))
+    else:
+        return math.pow(math.e, x) / (1 + math.pow(math.e, x))
+
+
+def log(a: float) -> float:
+    return math.log(a)
+
+
+def exp(x: float) -> float:
+    return math.exp(x)
+
+
+def log_back(a: float, b: float) -> float:
+    return b / a
+
+
+def inv(x: float) -> float:
+    return 1 / x
+
+
+def inv_back(x: float, b: float) -> float:
+    return -b / math.pow(x, 2)
+
+
+def relu(x: float) -> float:
+    if x <= 0:
+        return 0
+    return x
+
+
+def relu_back(x: float, b: float) -> float:
+    if x <= 0:
+        return 0
+    else:
+        return b
 
 
 # ## Task 0.3
@@ -52,3 +122,17 @@ from typing import Callable, Iterable
 
 
 # TODO: Implement for Task 0.3.
+def addLists(l1: list, l2: list) -> list:
+    raise NotImplementedError
+
+
+def negList(l: list) -> list:
+    raise NotImplementedError
+
+
+def sum(l1: list) -> list:
+    raise NotImplementedError
+
+
+def prod(l1: list) -> list:
+    raise NotImplementedError
