@@ -304,9 +304,11 @@ def relu_back(x: float, b: float) -> float:
 # - sum: sum lists
 # - prod: take the product of lists
 
+
 def map(f: Callable, l1: Iterable) -> Iterable:
     for n in l1:
         yield f(n)
+
 
 def zipWith[T, G](l1: Iterable[T], l2: Iterable[G]) -> Iterable[Tuple[T, G]]:
     it1 = iter(l1)
@@ -319,11 +321,13 @@ def zipWith[T, G](l1: Iterable[T], l2: Iterable[G]) -> Iterable[Tuple[T, G]]:
             return
         yield (n1, n2)
 
+
 def reduce[T, G](op: Callable[[T, G], G], init: G, l: Iterable[T]) -> G:
     build = init
     for n in l:
         build = op(n, build)
     return build
+
 
 def addLists(l1: Iterable[float], l2: Iterable[float]) -> Iterable[float]:
     return reduce(lambda z, sum: sum + [z[0] + z[1]], [], zipWith(l1, l2))
