@@ -28,10 +28,10 @@ class Module:
         """Return the direct child modules of this module."""
         m: Dict[str, Module] = self.__dict__["_modules"]
         return list(m.values())
-    
+
     def namedModules(self) -> Sequence[Tuple[str, Module]]:
         return [(name, module) for name, module in self.__dict__["_modules"].items()]
-    
+
     def setAllTraining(self, val: bool):
         self.training = val
         children_to_visit = list(self.modules())
@@ -53,13 +53,18 @@ class Module:
         for child in to_visit:
             whole_name = child[0]
             prepend = whole_name + "." if whole_name != "" else ""
-            params += [(prepend + name, param) for name, param in child[2]._parameters.items()]
-            to_visit += [((whole_name + "." if whole_name else "") + name, name, module) for name, module in list(child[2].namedModules())]
+            params += [
+                (prepend + name, param) for name, param in child[2]._parameters.items()
+            ]
+            to_visit += [
+                ((whole_name + "." if whole_name else "") + name, name, module)
+                for name, module in list(child[2].namedModules())
+            ]
         return params
 
     def parameters(self) -> Sequence[Parameter]:
         """Enumerate over all the parameters of this module and its descendents."""
-        params:list[Parameter] = []
+        params: list[Parameter] = []
         to_visit = [self]
         for child in to_visit:
             params += [param for param in child._parameters.values()]
