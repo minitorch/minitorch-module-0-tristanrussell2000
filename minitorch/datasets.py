@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import List, Tuple
 
 
-def make_pts(N):
+def make_pts(N: int):
     X = []
     for i in range(N):
         x_1 = random.random()
@@ -20,16 +20,16 @@ class Graph:
     y: List[int]
 
 
-def simple(N):
+def simple(N: int):
     X = make_pts(N)
     y = []
-    for x_1, x_2 in X:
+    for x_1, _ in X:
         y1 = 1 if x_1 < 0.5 else 0
         y.append(y1)
     return Graph(N, X, y)
 
 
-def diag(N):
+def diag(N: int):
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -38,7 +38,7 @@ def diag(N):
     return Graph(N, X, y)
 
 
-def split(N):
+def split(N: int):
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -47,7 +47,7 @@ def split(N):
     return Graph(N, X, y)
 
 
-def xor(N):
+def xor(N: int):
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -56,7 +56,7 @@ def xor(N):
     return Graph(N, X, y)
 
 
-def circle(N):
+def circle(N: int):
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -66,20 +66,30 @@ def circle(N):
     return Graph(N, X, y)
 
 
-def spiral(N):
-
-    def x(t):
+def spiral(N: int):
+    def x(t: float):
         return t * math.cos(t) / 20.0
 
-    def y(t):
+    def y(t: float):
         return t * math.sin(t) / 20.0
-    X = [(x(10.0 * (float(i) / (N // 2))) + 0.5, y(10.0 * (float(i) / (N //
-        2))) + 0.5) for i in range(5 + 0, 5 + N // 2)]
-    X = X + [(y(-10.0 * (float(i) / (N // 2))) + 0.5, x(-10.0 * (float(i) /
-        (N // 2))) + 0.5) for i in range(5 + 0, 5 + N // 2)]
+
+    X = [
+        (x(10.0 * (float(i) / (N // 2))) + 0.5, y(10.0 * (float(i) / (N // 2))) + 0.5)
+        for i in range(5 + 0, 5 + N // 2)
+    ]
+    X = X + [
+        (y(-10.0 * (float(i) / (N // 2))) + 0.5, x(-10.0 * (float(i) / (N // 2))) + 0.5)
+        for i in range(5 + 0, 5 + N // 2)
+    ]
     y2 = [0] * (N // 2) + [1] * (N // 2)
     return Graph(N, X, y2)
 
 
-datasets = {'Simple': simple, 'Diag': diag, 'Split': split, 'Xor': xor,
-    'Circle': circle, 'Spiral': spiral}
+datasets = {
+    "Simple": simple,
+    "Diag": diag,
+    "Split": split,
+    "Xor": xor,
+    "Circle": circle,
+    "Spiral": spiral,
+}

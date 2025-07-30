@@ -29,31 +29,47 @@ class Module:
         m: Dict[str, Module] = self.__dict__["_modules"]
         return list(m.values())
 
+    def namedModules(self) -> Sequence[Tuple[str, Module]]:
+        return [(name, module) for name, module in self.__dict__["_modules"].items()]
+
+    def setAllTraining(self, val: bool):
+        self.training = val
+        children_to_visit = list(self.modules())
+        for child in children_to_visit:
+            child.training = val
+            children_to_visit += child.modules()
+
     def train(self) -> None:
         """Set the mode of this module and all descendent modules to `train`."""
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.setAllTraining(True)
 
     def eval(self) -> None:
         """Set the mode of this module and all descendent modules to `eval`."""
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.setAllTraining(False)
 
     def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
-        """Collect all the parameters of this module and its descendents.
-
-        Returns
-        -------
-            The name and `Parameter` of each ancestor parameter.
-
-        """
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        params = []
+        to_visit = [("", "", self)]
+        for child in to_visit:
+            whole_name = child[0]
+            prepend = whole_name + "." if whole_name != "" else ""
+            params += [
+                (prepend + name, param) for name, param in child[2]._parameters.items()
+            ]
+            to_visit += [
+                ((whole_name + "." if whole_name else "") + name, name, module)
+                for name, module in list(child[2].namedModules())
+            ]
+        return params
 
     def parameters(self) -> Sequence[Parameter]:
         """Enumerate over all the parameters of this module and its descendents."""
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        params: list[Parameter] = []
+        to_visit = [self]
+        for child in to_visit:
+            params += [param for param in child._parameters.values()]
+            to_visit += list(child.modules())
+        return params
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """Manually add a parameter. Useful helper for scalar parameters.
