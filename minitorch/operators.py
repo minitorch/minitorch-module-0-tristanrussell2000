@@ -33,7 +33,57 @@ from typing import Callable, Iterable
 
 
 # TODO: Implement for Task 0.1.
+def mul(x: float, y: float) -> float:
+    return x * y
 
+def add(x: float, y: float) -> float:
+    return x + y
+
+def addLists(x: Iterable[float], y: Iterable[float]) -> Iterable[float]:
+    return [i + j for i, j in zip(x, y)]
+
+def is_close(x: float, y: float) -> bool:
+    return abs(x - y) < 1e-2
+
+def eq(x: float, y: float) -> bool:
+    return is_close(abs(x - y), 0)
+
+def id(x: float) -> float:
+    return x
+
+def inv(x: float) -> float:
+    return 1.0 / x
+
+def inv_back(x: float, y: float) -> float:
+    return -y  / (x * x)
+
+# TODO: IS THIS RIGHT??
+def log_back(x: float, y: float) -> float:
+    return -y / (x * x)
+
+def lt(x: float, y: float) -> float:
+    return 1.0 if x < y else 0.0
+
+def max(x: float, y: float) -> float:
+    return x if x > y else y
+
+def neg(x: float) -> float:
+    return -x
+
+def relu(x: float) -> float:
+    return max(0.0, x)
+
+def negList(l: Iterable[float]) -> Iterable[float]:
+    return [-x for x in l]
+
+def prod(l: Iterable[float]) -> float:
+    return math.prod(l)
+
+def relu_back(x: float, y: float) -> float:
+    return y if x > 0 else 0.0
+
+def sigmoid(x: float) -> float:
+    return 1.0 / (1.0 + math.exp(-x))
 
 # ## Task 0.3
 
