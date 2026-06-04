@@ -57,9 +57,8 @@ def inv(x: float) -> float:
 def inv_back(x: float, y: float) -> float:
     return -y  / (x * x)
 
-# TODO: IS THIS RIGHT??
 def log_back(x: float, y: float) -> float:
-    return -y / (x * x)
+    return y / x
 
 def lt(x: float, y: float) -> float:
     return 1.0 if x < y else 0.0
