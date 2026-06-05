@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Sequence, Tuple
+from typing import Any, Dict, Optional, Sequence, Tuple, cast
 
 
 class Module:
@@ -29,15 +29,21 @@ class Module:
         m: Dict[str, Module] = self.__dict__["_modules"]
         return list(m.values())
 
+    def named_modules(self) -> Sequence[Tuple[str, Module]]:
+        """Return the direct child modules of this module."""
+        m: Dict[str, Module] = self.__dict__["_modules"]
+        return list(m.items())
+
     def train(self) -> None:
         """Set the mode of this module and all descendent modules to `train`."""
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.training = True
+        for m in self.modules():
+            m.train()
 
     def eval(self) -> None:
-        """Set the mode of this module and all descendent modules to `eval`."""
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.training = False
+        for m in self.modules():
+            m.eval()
 
     def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
         """Collect all the parameters of this module and its descendents.
@@ -45,15 +51,18 @@ class Module:
         Returns
         -------
             The name and `Parameter` of each ancestor parameter.
-
         """
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        own_param_dict = cast(Dict[str, Parameter], self.__dict__["_parameters"])
+        own_params = [x for x in own_param_dict.items()]
+        descendant_params = [(module_name + "." + param_name, param) for (module_name, module) in self.named_modules() for (param_name, param) in module.named_parameters()]
+        return own_params + descendant_params
 
     def parameters(self) -> Sequence[Parameter]:
         """Enumerate over all the parameters of this module and its descendents."""
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        own_param_dict = cast(Dict[str, Parameter], self.__dict__["_parameters"])
+        own_params = [param for (_, param) in own_param_dict.items()]
+        descendant_params = [param for module in self.modules() for (_, param) in module.named_parameters()]
+        return own_params + descendant_params
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """Manually add a parameter. Useful helper for scalar parameters.
