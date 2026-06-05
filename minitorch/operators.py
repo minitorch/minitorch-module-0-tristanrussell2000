@@ -1,3 +1,4 @@
+from typing import TypeVar
 """Collection of the core mathematical operators used throughout the code base."""
 
 import math
@@ -39,9 +40,6 @@ def mul(x: float, y: float) -> float:
 def add(x: float, y: float) -> float:
     return x + y
 
-def addLists(x: Iterable[float], y: Iterable[float]) -> Iterable[float]:
-    return [i + j for i, j in zip(x, y)]
-
 def is_close(x: float, y: float) -> bool:
     return abs(x - y) < 1e-2
 
@@ -72,12 +70,6 @@ def neg(x: float) -> float:
 def relu(x: float) -> float:
     return max(0.0, x)
 
-def negList(l: Iterable[float]) -> Iterable[float]:
-    return [-x for x in l]
-
-def prod(l: Iterable[float]) -> float:
-    return math.prod(l)
-
 def relu_back(x: float, y: float) -> float:
     return y if x > 0 else 0.0
 
@@ -99,5 +91,29 @@ def sigmoid(x: float) -> float:
 # - sum: sum lists
 # - prod: take the product of lists
 
+T = TypeVar('T')
+T2 = TypeVar('T2')
+T3 = TypeVar('T3')
 
-# TODO: Implement for Task 0.3.
+def map(l: Iterable[float], f: Callable[[float], T]) -> Iterable[T]:
+    return [f(x) for x in l]
+
+def zipWith(l1: Iterable[T], l2: Iterable[T2], f: Callable[[T, T2], T3]) -> Iterable[T3]:
+    return [f(x, y) for x, y in zip(l1, l2)]
+
+def reduce(l: Iterable[T], f: Callable[[T, T2], T2], init: T2) -> T:
+    for x in l:
+        init = f(init, x)
+    return init
+
+def negList(l: Iterable[float]) -> Iterable[float]:
+    return map(l, neg)
+
+def addLists(l1: Iterable[float], l2: Iterable[float]) -> Iterable[float]:
+    return zipWith(l1, l2, add)
+
+def sum(l: Iterable[float]) -> float:
+    return reduce(l, add, 0.0)
+
+def prod(l: Iterable[float]) -> float:
+    return reduce(l, mul, 1.0)
